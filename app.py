@@ -1,6 +1,6 @@
 import streamlit as st
 import joblib
-mport os
+import Os
 
 # Load your trained models safely
 @st.cache(allow_output_mutation=True)
@@ -47,4 +47,5 @@ if st.button("Predict"):
                 st.warning("The news is likely **Fake**.")
         except Exception as e:
             st.error(f"Error during prediction: {e}")
+
 
