@@ -38,7 +38,7 @@ def main():
         st.write("This is where your prediction result will appear.")
 
 if __name__ == "__main__":
-    main() os.getcwd()
+    main(); os.getcwd()
 vectorizer_path = os.path.join(current_dir, 'vectorizer.jb')
 model_path = os.path.join(current_dir, 'lr_model.jb')
 
@@ -76,4 +76,5 @@ if st.button("Check News"):
             st.error(f"An error occurred during prediction: {e}")
 else:
     st.warning("Please enter some text to analyze.")
+
 
