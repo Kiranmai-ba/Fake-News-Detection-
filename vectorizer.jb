@@ -1,8 +1,12 @@
 import os
 import joblib
 
-# Assuming you already trained your vectorizer and model
-# Save them again with correct imports
+# Replace these with your actual trained objects
+vectorizer = ...  # Your trained vectorizer
+model = ...       # Your trained classifier
 
+# Save the vectorizer to 'vectorizer.jb'
 joblib.dump(vectorizer, 'vectorizer.jb')
+
+# Save the model to 'lr_model.jb'
 joblib.dump(model, 'lr_model.jb')
