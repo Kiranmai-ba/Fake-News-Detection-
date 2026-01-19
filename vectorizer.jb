@@ -3,6 +3,7 @@ import joblib
 
 # Replace these with your actual trained objects
 vectorizer = ...  # Your trained vectorizer
+vectorizer = joblib.load(vectorizer_path)
 model = ...       # Your trained classifier
 
 # Save the vectorizer to 'vectorizer.jb'
