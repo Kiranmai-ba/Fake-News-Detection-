@@ -1,63 +1,36 @@
-import os
-import streamlit as st
+import streamlit as st 
 import joblib
+import os
 
-# Paths to your files
-current_dir = os.getcwd()
+# Use relative paths to find the model files
+current_dir = os.path.dirname(os.path.abspath(__file__))
 vectorizer_path = os.path.join(current_dir, 'vectorizer.jb')
 model_path = os.path.join(current_dir, 'lr_model.jb')
 
-@st.cache_data
-def load_artifacts():
-    vectorizer = None
-    model = None
-    
-    # Load vectorizer
-    if not os.path.exists(vectorizer_path):
-        st.error(f"Vectorizer file not found at '{vectorizer_path}'. Please upload or place it in the correct directory.")
-    else:
-        try:
-            vectorizer = joblib.load(vectorizer_path)
-        except Exception as e:
-            st.error(f"Error loading vectorizer: {e}")
-    
-    # Load model
-    if not os.path.exists(model_path):
-        st.error(f"Model file not found at '{model_path}'. Please upload or place it in the correct directory.")
-    else:
-        try:
-            model = joblib.load(model_path)
-        except Exception as e:
-            st.error(f"Error loading model: {e}")
-    
-    return vectorizer, model
+try:
+    vectorizer = joblib.load(vectorizer_path)
+    model = joblib.load(model_path)
+    model_loaded = True
+except FileNotFoundError as e:
+    st.error(f"Error loading model files: {e}")
+    model_loaded = False
 
-def main():
-    st.title("Fake News Detection")
-    st.write("Enter a news article below to check whether it is Fake or Real.")
-    
-    # Load artifacts
-    vectorizer, model = load_artifacts()
-    
-    if vectorizer is None or model is None:
-        st.warning("Missing model or vectorizer. Please ensure they are in the correct directory.")
-        return
-    
-    news_input = st.text_area("News Article:", "")
-    
-    if st.button("Check News"):
-        if not news_input.strip():
-            st.warning("Please enter some text to analyze.")
+st.title("Fake News Detector") 
+st.write("Enter a News Article below to check whether it is Fake or Real.")
+
+news_input = st.text_area("News Article:", "")
+
+if st.button("Check News"):
+    if not model_loaded:
+        st.error("Cannot check news because model files were not found.")
+    elif news_input.strip():
+        transform_input = vectorizer.transform([news_input])
+        prediction = model.predict(transform_input)
+        
+        if prediction[0] == 1:
+            st.success("The news is real!")
         else:
-            try:
-                features = vectorizer.transform([news_input])
-                prediction = model.predict(features)
-                if prediction[0] == 1:
-                    st.success("The news is real! 👍")
-                else:
-                    st.error("The news is fake! 🚨")
-            except Exception as e:
-                st.error(f"An error occurred during prediction: {e}")
+            st.error("The news is fake!")
+    else:
+        st.warning("Please enter some text to analyze.")
 
-if __name__ == "__main__":
-    main()
