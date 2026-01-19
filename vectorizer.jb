@@ -1,9 +1,8 @@
 import os
 import joblib
 
-# This finds the absolute path to the folder where your script is located
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-vectorizer_path = os.path.join(BASE_DIR, 'vectorizer.jb')
+# Assuming you already trained your vectorizer and model
+# Save them again with correct imports
 
-vectorizer = joblib.load(vectorizer_path)
-VECTORIZER_PATH = "/full/path/to/your/vectorizer.jb"
+joblib.dump(vectorizer, 'vectorizer.jb')
+joblib.dump(model, 'lr_model.jb')
